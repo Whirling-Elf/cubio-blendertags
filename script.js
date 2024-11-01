@@ -15,40 +15,26 @@ function preloadImages(sources, callback) {
     });
 }
 
-// Change the image on mouse over and mouse leave
+// Change the image on click
 document.querySelectorAll(".gif-item").forEach(item => {
     const img = item.querySelector("img");
-    const spinner = document.createElement("div");
-    spinner.className = "spinner"; // Add the spinner class
-    item.appendChild(spinner); // Add the spinner to the item
-
-    const pngSrc = img.src.replace(".gif", ".png"); // Assuming the PNG is named the same as the GIF
-    const gifSrc = img.src;
-
-    // Preload both images
-    preloadImages([gifSrc, pngSrc], () => {
-        img.style.display = "block"; // Show the image after preloading
-        spinner.style.display = "none"; // Hide the spinner
-    });
-
-    // Show spinner while the GIF is loading
-    img.addEventListener("mouseover", () => {
-        img.src = gifSrc; // Load the GIF
-        spinner.style.display = "block"; // Show the spinner
-        img.onload = () => {
-            spinner.style.display = "none"; // Hide the spinner when GIF is loaded
-        };
-    });
-
-    img.addEventListener("mouseleave", () => {
-        img.src = pngSrc; // Load the PNG
-    });
+    const spinner = item.querySelector(".spinner");
 
     img.addEventListener("click", () => {
-        if (img.src.includes(".gif")) {
-            img.src = img.src.replace(".gif", ".png");
-        } else {
-            img.src = img.src.replace(".png", ".gif");
-        }
+        const currentSrc = img.src;
+        const pngSrc = currentSrc.includes(".gif") ? currentSrc.replace(".gif", ".png") : currentSrc.replace(".png", ".gif");
+        
+        // Show the spinner while the new image is loading
+        spinner.style.display = "block"; // Show spinner
+        
+        // Create a new image to preload the GIF
+        const newImage = new Image();
+        newImage.src = pngSrc;
+
+        newImage.onload = () => {
+            img.src = pngSrc; // Set the image source to the newly loaded image
+            spinner.style.display = "none"; // Hide the spinner after loading
+        };
     });
 });
+
