@@ -1,12 +1,14 @@
-// Toggle GIF playback on click
+// Change the image on mouse over and mouse leave
 document.querySelectorAll(".gif-item img").forEach(img => {
-    img.addEventListener("click", () => {
-        if (img.src.includes(".gif")) {
-            // Replace with a paused version (if available)
-            img.src = img.src.replace(".gif", ".png");
-        } else {
-            // Replace with GIF to resume animation
+    img.addEventListener("mouseover", () => {
+        if (img.src.includes(".png")) {
             img.src = img.src.replace(".png", ".gif");
+        }
+    });
+
+    img.addEventListener("mouseleave", () => {
+        if (img.src.includes(".gif")) {
+            img.src = img.src.replace(".gif", ".png");
         }
     });
 });
